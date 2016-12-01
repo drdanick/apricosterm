@@ -9,3 +9,6 @@ a.out
 *.o
 *.s
 *.gch
+
+# Build directory (at least on my system)
+build/
