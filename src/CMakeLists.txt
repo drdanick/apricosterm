@@ -3,6 +3,7 @@ pkg_search_module (SDL2 REQUIRED sdl2)
 
 set (apricosterm_src
     main.c
+    screen.c
     )
 
 include_directories (${SDL2_INCLUDE_DIRS})
