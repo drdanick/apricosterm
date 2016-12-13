@@ -1,6 +1,8 @@
 #include "apricosterm.h"
 #include "screen.h"
 
+#define SDL_IMG_INIT_FLAGS IMG_INIT_PNG
+
 /* Error string buffer */
 char errbuff[512];
 
@@ -45,6 +47,11 @@ int initScreen(char* title, unsigned int width, unsigned int height, Color backg
         return 0;
     }
 
+    if(!(IMG_Init(SDL_IMG_INIT_FLAGS) & SDL_IMG_INIT_FLAGS)) {
+        screenSetError("initScreen", "Error initializing SDL image loader", 0);
+        return 0;
+    }
+
     SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_SHOWN, &window, &renderer);
 
     if(!window || !renderer) {
@@ -60,6 +67,18 @@ int initScreen(char* title, unsigned int width, unsigned int height, Color backg
     SDL_RenderPresent(renderer);
 
     return 1;
+}
+
+SDL_Renderer* getScreenRenderer() {
+    return renderer;
+}
+
+unsigned int getScreenWidth() {
+    return screenWidth;
+}
+
+unsigned int getScreenHeight() {
+    return screenHeight;
 }
 
 /*========================================================
@@ -118,6 +137,7 @@ void destroyWindow() {
         SDL_DestroyWindow(window);
         window = NULL;
 
+        IMG_Quit();
         SDL_Quit();
     }
 }
