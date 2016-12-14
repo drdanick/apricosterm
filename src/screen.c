@@ -118,6 +118,22 @@ void drawRect(int x, int y, int w, int h) {
     SDL_RenderDrawRect(renderer, &rect);
 }
 
+void copyTextureSegmentToScreen(SDL_Texture* tex, SDL_Rect* srcRect, SDL_Rect* destRect) {
+    SDL_RenderCopy(renderer, tex, srcRect, destRect);
+}
+
+void copyFullTextureToScreen(SDL_Texture* tex, SDL_Rect* destRect) {
+    SDL_RenderCopy(renderer, tex, NULL, destRect);
+}
+
+void resetRenderTarget() {
+    SDL_SetRenderTarget(renderer, NULL);
+}
+
+void setRenderTarget(SDL_Texture* target) {
+    SDL_SetRenderTarget(renderer, target);
+}
+
 void presentRenderer() {
     SDL_RenderPresent(renderer);
 }
