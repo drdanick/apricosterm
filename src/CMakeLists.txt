@@ -6,6 +6,7 @@ set (apricosterm_src
     main.c
     screen.c
     managedtextures.c
+    terminalrenderer.c
     )
 
 include_directories (${SDL2_INCLUDE_DIRS})
