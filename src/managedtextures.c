@@ -81,6 +81,8 @@ int manageExistingTexture(SDL_Texture* texture) {
     }
 
     newmtex->texture = texture;
+    newmtex->next = NULL;
+    newmtex->prev = NULL;
 
     /* Insert the new texture into the list */
     insertManagedTextureIntoList(newmtex);

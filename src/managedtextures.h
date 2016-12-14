@@ -4,8 +4,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-int initManagedTextures();
-
 SDL_Texture* createManagedTexture(unsigned int width, unsigned int height, SDL_Renderer* renderer, SDL_TextureAccess access);
 int manageExistingTexture(SDL_Texture* texture);
 SDL_Texture* createManagedTextureFromFile(char* path, SDL_Renderer* renderer);
