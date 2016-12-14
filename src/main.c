@@ -4,9 +4,8 @@
 #include "screen.h"
 
 int main(int argc, char** argv) {
-    Color c = {255,255,255};
     SDL_Event event;
-    initScreen("Potato", 640, 480, c);
+    initScreen("Potato", SCREEN_WIDTH, SCREEN_HEIGHT);
     char done = 0;
 
     while(!done) {
@@ -20,6 +19,7 @@ int main(int argc, char** argv) {
         SDL_Delay(100);
         updateWindow();
     }
+    destroyScreen();
     
     return EXIT_SUCCESS;
 }

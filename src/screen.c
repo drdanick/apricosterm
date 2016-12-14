@@ -9,7 +9,6 @@ char errbuff[512];
 /* SDL Stuff */
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
-Color backgroundColor;
 
 unsigned int screenWidth  = -1;
 unsigned int screenHeight = -1;
@@ -35,12 +34,11 @@ void screenSetError(char* functionName, char* error, char showSdlErr) {
  *========================================================
  */
 
-int initScreen(char* title, unsigned int width, unsigned int height, Color background) {
+int initScreen(char* title, unsigned int width, unsigned int height) {
     if(window || renderer) return 0;
 
     screenWidth = width;
     screenHeight = height;
-    backgroundColor = background;
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         screenSetError("initScreen", "Error initializing SDL", 1);
@@ -52,19 +50,13 @@ int initScreen(char* title, unsigned int width, unsigned int height, Color backg
         return 0;
     }
 
-    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_SHOWN, &window, &renderer);
+    window = SDL_CreateWindow(title, 50, 50, width, height, SDL_WINDOW_SHOWN);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     if(!window || !renderer) {
         screenSetError("initScreen", "Could not create SDL window", 1);
         return 0;
     }
-
-    SDL_SetWindowTitle(window, title);
-
-    setDrawColor(255,255,255, 255);
-    SDL_RenderClear(renderer);
-    fillRect(0,0,width,height);
-    SDL_RenderPresent(renderer);
 
     return 1;
 }
@@ -86,8 +78,8 @@ unsigned int getScreenHeight() {
  *========================================================
  */
 
-void setDrawColor(int r, int g, int b, int a) {
-    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+void setDrawColor(int r, int g, int b) {
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
 }
 
 void drawLine(int x1, int y1, int x2, int y2) {
@@ -142,11 +134,11 @@ void clearRenderer() {
     SDL_RenderClear(renderer);
 }
 
-void updateWindow() {
+void updateScreen() {
     SDL_UpdateWindowSurface(window);
 }
 
-void destroyWindow() {
+void destroyScreen() {
     if(window && renderer) {
         SDL_DestroyRenderer(renderer);
         renderer = NULL;
