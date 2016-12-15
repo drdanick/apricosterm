@@ -19,7 +19,7 @@ void charCodeToFontCoordinates(char c, int* outRow, int* outCol);
 
 void termRendererInit() {
     screenBuffer = createManagedTexture(getScreenWidth(), getScreenHeight(), getScreenRenderer(), SDL_TEXTUREACCESS_TARGET);
-    fontTexture = createManagedTextureFromFile(FONT_FILE, getScreenRenderer());
+    fontTexture = createManagedTextureFromFile(FONT_FILE, NULL, getScreenRenderer());
     bufferWidth = getScreenWidth();
     bufferHeight = getScreenHeight();
     SDL_QueryTexture(fontTexture, NULL, NULL, &fontWidth, &fontHeight);

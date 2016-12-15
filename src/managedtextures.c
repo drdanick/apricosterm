@@ -48,12 +48,29 @@ SDL_Texture* createManagedTexture(unsigned int width, unsigned int height, SDL_R
     return texture;
 }
 
-SDL_Texture* createManagedTextureFromFile(char* path, SDL_Renderer* renderer) {
+SDL_Texture* createManagedTextureFromFile(char* path, SDL_Palette* newPalette, SDL_Renderer* renderer) {
     SDL_Texture* tex = NULL;
+    SDL_Surface* surface = NULL;
 
-    tex = IMG_LoadTexture(renderer, path);
-    if(!tex) {
+    surface = IMG_Load(path);
+
+    if(!surface) {
         screenSetError("createManagedTextureFromFile", "Could not load image", 0);
+        return NULL;
+    }
+
+    if(newPalette) {
+        if(!SDL_SetSurfacePalette(surface, newPalette)) {
+            screenSetError("createManagedTextureFromFile", "Could not apply palette to image", 1);
+            return NULL;
+        }
+    }
+
+    tex = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    if(!tex) {
+        screenSetError("createManagedTextureFromFile", "Could not create texture from image", 0);
         return NULL;
     }
 
