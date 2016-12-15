@@ -6,6 +6,7 @@ set (apricosterm_src
     main.c
     screen.c
     managedtextures.c
+    terminalemulator.c
     terminalrenderer.c
     )
 
