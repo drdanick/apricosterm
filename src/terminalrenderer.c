@@ -189,6 +189,17 @@ void terminalScroll(int lines) {
     SDL_RenderFillRect(getScreenRenderer(), &blankRect);
 }
 
+void terminalClear(char returnCursor) {
+    setRenderTarget(screenBuffer);
+    SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+    clearRenderer();
+
+    if(returnCursor) {
+        cursorRow = 0;
+        cursorCol = 0;
+    }
+}
+
 void enableCursor() {
     cursorEnabled = 1;
 }

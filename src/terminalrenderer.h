@@ -12,6 +12,7 @@ void terminalSetRow(int row);
 void terminalSetCol(int col);
 void terminalAdvanceCursor(char clamp);
 void terminalScroll(int lines);
+void terminalClear(char returnCursor);
 void enableCursor();
 void disableCursor();
 void terminalRefresh();
