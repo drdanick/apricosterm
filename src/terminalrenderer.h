@@ -11,6 +11,7 @@ void terminalBackspace(char lineWrap);
 void terminalSetRow(int row);
 void terminalSetCol(int col);
 void terminalAdvanceCursor(char clamp);
+void terminalScroll(int lines);
 void terminalRefresh();
 
 #endif /* TERM_RENDERER_H */

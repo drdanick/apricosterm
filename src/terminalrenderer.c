@@ -53,7 +53,7 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
     cursorCol = 0;
 
     setRenderTarget(screenBuffer);
-    setDrawColor(0, 0, 0);
+    SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     SDL_RenderClear(getScreenRenderer());
 
     resetRenderTarget();
@@ -100,10 +100,10 @@ void terminalNewLine(char carriageReturn, char scroll) {
     if(carriageReturn)
         cursorCol = 0;
 
-    if(cursorRow >= SCREEN_COLS) {
+    if(cursorRow >= SCREEN_ROWS) {
         cursorRow--;
         if(scroll) {
-            // TODO: Scroll screen
+            terminalScroll(1);
         }
     }
 }
@@ -145,8 +145,43 @@ void terminalAdvanceCursor(char clamp) {
     }
 
     if(cursorRow >= SCREEN_ROWS) {
-        /* TODO: Scroll screen */
+        terminalScroll(1);
+        cursorRow--;
     }
+}
+
+void terminalScroll(int lines) {
+    if(lines > SCREEN_ROWS)
+        lines = SCREEN_ROWS;
+
+    /* Rect covering everything that is preserved after the scroll */
+    SDL_Rect scrollRect = {
+        0,
+        lines * CHAR_HEIGHT,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT - lines * CHAR_HEIGHT
+    };
+
+    SDL_Rect destRect = {
+        0,
+        0,
+        SCREEN_WIDTH,
+        SCREEN_HEIGHT - lines * CHAR_HEIGHT
+    };
+
+    SDL_Rect blankRect = {
+        0,
+        SCREEN_HEIGHT - lines * CHAR_HEIGHT,
+        SCREEN_WIDTH,
+        lines * CHAR_HEIGHT
+    };
+
+    SDL_SetRenderTarget(getScreenRenderer(), screenBuffer);
+    SDL_RenderCopy(getScreenRenderer(), screenBuffer, &scrollRect, &destRect);
+
+    /* Erase scrolled portion of screen */
+    SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+    SDL_RenderFillRect(getScreenRenderer(), &blankRect);
 }
 
 void terminalRefresh() {
