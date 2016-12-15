@@ -12,6 +12,8 @@ void terminalSetRow(int row);
 void terminalSetCol(int col);
 void terminalAdvanceCursor(char clamp);
 void terminalScroll(int lines);
+void enableCursor();
+void disableCursor();
 void terminalRefresh();
 
 #endif /* TERM_RENDERER_H */
