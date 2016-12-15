@@ -18,11 +18,6 @@ SDL_Renderer* getScreenRenderer();
 unsigned int getScreenWidth();
 unsigned int getScreenHeight();
 
-
-//void setDrawColor(int r, int g, int b);
-//void drawLine(int x1, int y1, int x2, int y2);
-//void fillRect(int x, int y, int w, int h);
-//void drawRect(int x, int y, int w, int h);
 void copyTextureSegmentToScreen(SDL_Texture* tex, SDL_Rect* srcRect, SDL_Rect* destRect);
 void copyFullTextureToScreen(SDL_Texture*, SDL_Rect* destRect);
 void resetRenderTarget();
