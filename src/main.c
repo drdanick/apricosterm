@@ -9,7 +9,11 @@ int main(int argc, char** argv) {
     SDL_Event event;
     initScreen("Potato", SCREEN_WIDTH, SCREEN_HEIGHT);
     char done = 0;
-    termRendererInit();
+    SDL_Color bgColor = BACKGROUND_COLOR;
+    SDL_Color fgColor = FOREGROUND_COLOR;
+    if(!termRendererInit(bgColor, fgColor)) {
+        printf("ERROR: %s\n", screenGetError());
+    }
 
     SDL_StartTextInput();
     while(!done) {

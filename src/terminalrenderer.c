@@ -9,6 +9,8 @@ int fontWidth;
 int fontHeight;
 int bufferWidth;
 int bufferHeight;
+SDL_Color backgroundColor;
+SDL_Color foregroundColor;
 
 /* State variables */
 int cursorRow;
@@ -16,10 +18,33 @@ int cursorCol;
 
 /* Private function defs */
 void charCodeToFontCoordinates(char c, int* outRow, int* outCol);
+SDL_Palette* createTerminalPalette(SDL_Color backgroundColor, SDL_Color foregroundColor);
 
-void termRendererInit() {
+int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
+    backgroundColor = bgColor;
+    foregroundColor = fgColor;
+    SDL_Palette* palette = createTerminalPalette(bgColor, fgColor);
+
+    if(!palette) {
+        screenSetError("termRendererInit", (char*)screenGetError(), 0);
+        return 0;
+    }
+
     screenBuffer = createManagedTexture(getScreenWidth(), getScreenHeight(), getScreenRenderer(), SDL_TEXTUREACCESS_TARGET);
-    fontTexture = createManagedTextureFromFile(FONT_FILE, NULL, getScreenRenderer());
+    if(!screenBuffer) {
+        SDL_FreePalette(palette);
+        screenSetError("termRendererInit", (char*)screenGetError(), 0);
+        return 0;
+    }
+
+    fontTexture = createManagedTextureFromFile(FONT_FILE, palette, getScreenRenderer());
+    SDL_FreePalette(palette);
+    if(!fontTexture) {
+        SDL_DestroyTexture(screenBuffer);
+        screenSetError("termRendererInit", (char*)screenGetError(), 0);
+        return 0;
+    }
+
     bufferWidth = getScreenWidth();
     bufferHeight = getScreenHeight();
     SDL_QueryTexture(fontTexture, NULL, NULL, &fontWidth, &fontHeight);
@@ -32,6 +57,8 @@ void termRendererInit() {
     SDL_RenderClear(getScreenRenderer());
 
     resetRenderTarget();
+
+    return 1;
 }
 
 void terminalPutStr(char* str) {
@@ -140,4 +167,19 @@ void terminalRefresh() {
 void charCodeToFontCoordinates(char c, int* outRow, int* outCol) {
     *outRow = c / FONT_COLS;
     *outCol = c % FONT_COLS;
+}
+
+/* private */
+SDL_Palette* createTerminalPalette(SDL_Color backgroundColor, SDL_Color foregroundColor) {
+    SDL_Palette* palette = SDL_AllocPalette(256);
+
+    if(!palette) {
+        screenSetError("createTerminalPalette", "Could not allocate palette", 1);
+        return NULL;
+    }
+
+    palette->colors[0] = backgroundColor;
+    palette->colors[palette->ncolors - 1] = foregroundColor;
+
+    return palette;
 }

@@ -54,7 +54,7 @@ SDL_Texture* createManagedTextureFromFile(char* path, SDL_Palette* newPalette, S
     }
 
     if(newPalette) {
-        if(!SDL_SetSurfacePalette(surface, newPalette)) {
+        if(SDL_SetSurfacePalette(surface, newPalette) < 0) {
             screenSetError("createManagedTextureFromFile", "Could not apply palette to image", 1);
             return NULL;
         }
