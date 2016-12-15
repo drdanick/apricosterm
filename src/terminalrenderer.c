@@ -3,6 +3,7 @@
 #include "managedtextures.h"
 #include "screen.h"
 
+SDL_Texture* textBuffer = NULL;
 SDL_Texture* screenBuffer = NULL;
 SDL_Texture* fontTexture = NULL;
 int fontWidth;
@@ -26,9 +27,18 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
     cursorEnabled = 1;
     backgroundColor = bgColor;
     foregroundColor = fgColor;
-    SDL_Palette* palette = createTerminalPalette(bgColor, fgColor);
+    cursorRow = 0;
+    cursorCol = 0;
 
+    SDL_Palette* palette = createTerminalPalette(bgColor, fgColor);
     if(!palette) {
+        screenSetError("termRendererInit", (char*)screenGetError(), 0);
+        return 0;
+    }
+
+    textBuffer = createManagedTexture(getScreenWidth(), getScreenHeight(), getScreenRenderer(), SDL_TEXTUREACCESS_TARGET);
+    if(!textBuffer) {
+        SDL_FreePalette(palette);
         screenSetError("termRendererInit", (char*)screenGetError(), 0);
         return 0;
     }
@@ -36,6 +46,7 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
     screenBuffer = createManagedTexture(getScreenWidth(), getScreenHeight(), getScreenRenderer(), SDL_TEXTUREACCESS_TARGET);
     if(!screenBuffer) {
         SDL_FreePalette(palette);
+        destroyManagedTexture(textBuffer);
         screenSetError("termRendererInit", (char*)screenGetError(), 0);
         return 0;
     }
@@ -43,6 +54,7 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
     fontTexture = createManagedTextureFromFile(FONT_FILE, palette, getScreenRenderer());
     SDL_FreePalette(palette);
     if(!fontTexture) {
+        destroyManagedTexture(textBuffer);
         destroyManagedTexture(screenBuffer);
         screenSetError("termRendererInit", (char*)screenGetError(), 0);
         return 0;
@@ -52,13 +64,8 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
     bufferHeight = getScreenHeight();
     SDL_QueryTexture(fontTexture, NULL, NULL, &fontWidth, &fontHeight);
 
-    cursorRow = 0;
-    cursorCol = 0;
-
     SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
-    setRenderTarget(screenBuffer);
-    SDL_RenderClear(getScreenRenderer());
-    setRenderTarget(screenBuffer);
+    setRenderTarget(textBuffer);
     SDL_RenderClear(getScreenRenderer());
 
     resetRenderTarget();
@@ -92,7 +99,7 @@ void terminalPutChar(char c, char moveCursor) {
     fontSrcRect.x *= CHAR_WIDTH;
     fontSrcRect.y *= CHAR_HEIGHT;
 
-    setRenderTarget(screenBuffer);
+    setRenderTarget(textBuffer);
     copyTextureSegmentToScreen(fontTexture, &fontSrcRect, &destRect);
 
     if(moveCursor)
@@ -181,8 +188,8 @@ void terminalScroll(int lines) {
         lines * CHAR_HEIGHT
     };
 
-    SDL_SetRenderTarget(getScreenRenderer(), screenBuffer);
-    SDL_RenderCopy(getScreenRenderer(), screenBuffer, &scrollRect, &destRect);
+    SDL_SetRenderTarget(getScreenRenderer(), textBuffer);
+    SDL_RenderCopy(getScreenRenderer(), textBuffer, &scrollRect, &destRect);
 
     /* Erase scrolled portion of screen */
     SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
@@ -190,7 +197,7 @@ void terminalScroll(int lines) {
 }
 
 void terminalClear(char returnCursor) {
-    setRenderTarget(screenBuffer);
+    setRenderTarget(textBuffer);
     SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     clearRenderer();
 
@@ -216,14 +223,14 @@ void terminalRefresh() {
         bufferHeight
     };
 
-    resetRenderTarget();
-    SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
-    clearRenderer();
-    copyFullTextureToScreen(screenBuffer, NULL);
+    setRenderTarget(screenBuffer);
+    copyFullTextureToScreen(textBuffer, NULL);
 
     if(cursorEnabled)
         drawCursor();
 
+    resetRenderTarget();
+    copyFullTextureToScreen(screenBuffer, NULL);
     presentRenderer();
 }
 
