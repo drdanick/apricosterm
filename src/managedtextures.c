@@ -27,12 +27,6 @@ SDL_Texture* createManagedTexture(unsigned int width, unsigned int height, SDL_R
         return NULL;
     }
 
-    /*newmtex = malloc(sizeof(ManagedTexture_));*/
-    /*if(!newmtex) {*/
-        /*screenSetError("createTexture", "Could not allocate texture metadata", 0);*/
-        /*return NULL;*/
-    /*}*/
-
     texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGB888, access, width, height);
     if(!texture) {
         screenSetError("createTexture", "Could not create SDL texture", 1);

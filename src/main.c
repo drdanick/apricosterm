@@ -44,10 +44,10 @@ int main(int argc, char** argv) {
         terminalRefresh();
     }
 
-    
+
     SDL_StopTextInput();
     destroyAllTextures();
     destroyScreen();
-    
+
     return EXIT_SUCCESS;
 }
