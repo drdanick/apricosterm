@@ -28,4 +28,28 @@
 #define RPT           0x7F /* Enable repeat message mode (this message is handled in the previous comm state) */
 
 
+/*========================================================
+ * Standard ANSI EGA color table
+ *========================================================
+ */
+
+#define EGA_BLACK    {0, 0, 0}
+#define EGA_DBLUE    {0, 0, 170}
+#define EGA_DGREEN   {0, 170, 0}
+#define EGA_DCYAN    {0, 170, 170}
+#define EGA_DRED     {170, 0, 0}
+#define EGA_DMAGENTA {170, 0, 170}
+#define EGA_BROWN    {170, 85, 0}
+#define EGA_GRAY     {170, 170, 170}
+#define EGA_DGRAY    {85, 85, 85}
+#define EGA_BLUE     {85, 85, 255}
+#define EGA_GREEN    {85, 255, 85}
+#define EGA_CYAN     {85, 255, 255}
+#define EGA_RED      {255, 85, 85}
+#define EGA_MAGENTA  {255, 85, 255}
+#define EGA_YELLOW   {255, 255, 85}
+#define EGA_WHITE    {255, 255, 255}
+
+
+
 #endif /* TERM_EMULATOR_H */
