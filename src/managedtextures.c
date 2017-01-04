@@ -4,6 +4,7 @@
 typedef struct ManagedTexture_ ManagedTexture_;
 struct ManagedTexture_ {
     SDL_Texture* texture;
+    SDL_Surface* surface;
     ManagedTexture_* next;
     ManagedTexture_* prev;
 };
@@ -34,7 +35,7 @@ SDL_Texture* createManagedTexture(unsigned int width, unsigned int height, SDL_R
     }
 
     /* Manage the texture */
-    if(!manageExistingTexture(texture)) {
+    if(!manageExistingTexture(texture, NULL)) {
         screenSetError("createTexture", (char*)screenGetError(), 0);
         return NULL;
     }
@@ -61,23 +62,24 @@ SDL_Texture* createManagedTextureFromFile(char* path, SDL_Palette* newPalette, S
     }
 
     tex = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
 
     if(!tex) {
         screenSetError("createManagedTextureFromFile", "Could not create texture from image", 0);
+        SDL_FreeSurface(surface);
         return NULL;
     }
 
-    if(!manageExistingTexture(tex)) {
+    if(!manageExistingTexture(tex, surface)) {
         screenSetError("createManagedTextureFromFile", (char*)screenGetError(), 0);
         SDL_DestroyTexture(tex);
+        SDL_FreeSurface(surface);
         return NULL;
     }
 
     return tex;
 }
 
-int manageExistingTexture(SDL_Texture* texture) {
+int manageExistingTexture(SDL_Texture* texture, SDL_Surface* surface) {
     ManagedTexture_* newmtex;
 
     if(findManagedTexture(texture)) {
@@ -92,6 +94,7 @@ int manageExistingTexture(SDL_Texture* texture) {
     }
 
     newmtex->texture = texture;
+    newmtex->surface = surface;
     newmtex->next = NULL;
     newmtex->prev = NULL;
 
@@ -110,6 +113,7 @@ int destroyManagedTexture(SDL_Texture* ptr) {
     }
 
     SDL_DestroyTexture(mtex->texture);
+    SDL_FreeSurface(mtex->surface);
     if(mtex->prev) mtex->prev->next = mtex->next;
     if(mtex->next) mtex->next->prev = mtex->prev;
     if(managedTextures == mtex) managedTextures = mtex->next;
