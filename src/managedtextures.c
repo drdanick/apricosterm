@@ -79,6 +79,34 @@ SDL_Texture* createManagedTextureFromFile(char* path, SDL_Palette* newPalette, S
     return tex;
 }
 
+SDL_Texture* applyPaletteToTexture(SDL_Texture* texture, SDL_Palette* newPalette, SDL_Renderer* renderer) {
+    SDL_Texture* newTex;
+    ManagedTexture_* mtex = findManagedTexture(texture);
+
+
+    if(mtex->surface == NULL) {
+        screenSetError("applyPaletteToTexture", "Given texture is not palettized.", 0);
+        return NULL;
+    }
+
+    if(SDL_SetSurfacePalette(mtex->surface, newPalette) < 0) {
+        screenSetError("createManagedTextureFromFile", "Could not apply palette to image", 1);
+        return NULL;
+    }
+
+    newTex = SDL_CreateTextureFromSurface(renderer, mtex->surface);
+
+    if(!newTex) {
+        screenSetError("createManagedTextureFromFile", "Could not create texture from image", 0);
+        return NULL;
+    }
+
+    SDL_DestroyTexture(mtex->texture);
+    mtex->texture = newTex;
+
+    return newTex;
+}
+
 int manageExistingTexture(SDL_Texture* texture, SDL_Surface* surface) {
     ManagedTexture_* newmtex;
 
