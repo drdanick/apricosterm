@@ -13,8 +13,11 @@ void terminalSetCol(int col);
 void terminalAdvanceCursor(char clamp);
 void terminalScroll(int lines);
 void terminalClear(char returnCursor);
+void terminalSetBackgroundColor(SDL_Color bgColor);
+void terminalSetForegroundColor(SDL_Color fgColor);
 void enableCursor();
 void disableCursor();
 void terminalRefresh();
+void destroyTerminalRenderer();
 
 #endif /* TERM_RENDERER_H */

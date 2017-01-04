@@ -6,6 +6,7 @@
 SDL_Texture* textBuffer = NULL;
 SDL_Texture* screenBuffer = NULL;
 SDL_Texture* fontTexture = NULL;
+SDL_Palette* palette = NULL;
 int fontWidth;
 int fontHeight;
 int bufferWidth;
@@ -21,6 +22,7 @@ int cursorCol;
 /* Private function defs */
 void charCodeToFontCoordinates(char c, int* outRow, int* outCol);
 SDL_Palette* createTerminalPalette(SDL_Color backgroundColor, SDL_Color foregroundColor);
+void adjustPaletteColors(SDL_Palette* palette, SDL_Color backgroundColor, SDL_Color foregroundColor);
 void drawCursor();
 
 int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
@@ -30,30 +32,29 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
     cursorRow = 0;
     cursorCol = 0;
 
-    SDL_Palette* palette = createTerminalPalette(bgColor, fgColor);
-    if(!palette) {
-        screenSetError("termRendererInit", (char*)screenGetError(), 0);
-        return 0;
-    }
-
     textBuffer = createManagedTexture(getScreenWidth(), getScreenHeight(), getScreenRenderer(), SDL_TEXTUREACCESS_TARGET);
     if(!textBuffer) {
-        SDL_FreePalette(palette);
         screenSetError("termRendererInit", (char*)screenGetError(), 0);
         return 0;
     }
 
     screenBuffer = createManagedTexture(getScreenWidth(), getScreenHeight(), getScreenRenderer(), SDL_TEXTUREACCESS_TARGET);
     if(!screenBuffer) {
-        SDL_FreePalette(palette);
+        destroyManagedTexture(textBuffer);
+        screenSetError("termRendererInit", (char*)screenGetError(), 0);
+        return 0;
+    }
+
+    palette = createTerminalPalette(bgColor, fgColor);
+    if(!palette) {
         destroyManagedTexture(textBuffer);
         screenSetError("termRendererInit", (char*)screenGetError(), 0);
         return 0;
     }
 
     fontTexture = createManagedTextureFromFile(FONT_FILE, palette, getScreenRenderer());
-    SDL_FreePalette(palette);
     if(!fontTexture) {
+        SDL_FreePalette(palette);
         destroyManagedTexture(textBuffer);
         destroyManagedTexture(screenBuffer);
         screenSetError("termRendererInit", (char*)screenGetError(), 0);
@@ -207,6 +208,18 @@ void terminalClear(char returnCursor) {
     }
 }
 
+void terminalSetBackgroundColor(SDL_Color bgColor) {
+    backgroundColor = bgColor;
+    adjustPaletteColors(palette, backgroundColor, foregroundColor);
+    fontTexture = applyPaletteToTexture(fontTexture, palette, getScreenRenderer());
+}
+
+void terminalSetForegroundColor(SDL_Color fgColor) {
+    foregroundColor = fgColor;
+    adjustPaletteColors(palette, backgroundColor, foregroundColor);
+    fontTexture = applyPaletteToTexture(fontTexture, palette, getScreenRenderer());
+}
+
 void enableCursor() {
     cursorEnabled = 1;
 }
@@ -234,6 +247,9 @@ void terminalRefresh() {
     presentRenderer();
 }
 
+void destroyTerminalRenderer() {
+    SDL_FreePalette(palette);
+}
 
 /* private */
 void charCodeToFontCoordinates(char c, int* outRow, int* outCol) {
@@ -254,6 +270,12 @@ SDL_Palette* createTerminalPalette(SDL_Color backgroundColor, SDL_Color foregrou
     palette->colors[palette->ncolors - 1] = foregroundColor;
 
     return palette;
+}
+
+/* private */
+void adjustPaletteColors(SDL_Palette* palette, SDL_Color backgroundColor, SDL_Color foregroundColor) {
+    palette->colors[0] = backgroundColor;
+    palette->colors[palette->ncolors - 1] = foregroundColor;
 }
 
 /* private */
