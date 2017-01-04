@@ -1,6 +1,8 @@
 #ifndef TERM_EMULATOR_H
 #define TERM_EMULATOR_H
 
+#include <SDL2/SDL.h>
+
 /*========================================================
  * Terminal control codes
  *========================================================
@@ -51,5 +53,12 @@
 #define EGA_WHITE    {255, 255, 255, 255}
 
 
+/*========================================================
+ * Terminal variables and tables
+ *========================================================
+ */
+
+/* Indexed color table */
+extern const SDL_Color EGA_COLOR_TABLE[];
 
 #endif /* TERM_EMULATOR_H */

@@ -3,6 +3,7 @@
 #include "apricosterm.h"
 #include "screen.h"
 #include "terminalrenderer.h"
+#include "terminalemulator.h"
 #include "managedtextures.h"
 
 int main(int argc, char** argv) {
@@ -50,6 +51,7 @@ int main(int argc, char** argv) {
 
 
     SDL_StopTextInput();
+    destroyTerminalRenderer();
     destroyAllTextures();
     destroyScreen();
 
