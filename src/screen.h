@@ -4,12 +4,6 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-typedef struct {
-    char red;
-    char green;
-    char blue;
-} Color;
-
 const char* screenGetError();
 void screenSetError(char* functionName, char* error, char showSdlErr);
 
