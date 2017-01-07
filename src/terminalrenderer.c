@@ -116,7 +116,7 @@ void terminalNewLine(char carriageReturn, char scroll) {
     if(cursorRow >= SCREEN_ROWS) {
         cursorRow--;
         if(scroll) {
-            terminalScroll(1);
+            terminalScroll(1, 0);
         }
     }
 }
@@ -168,7 +168,7 @@ void terminalAdvanceCursorRight(char clamp) {
     }
 
     if(cursorRow >= SCREEN_ROWS) {
-        terminalScroll(1);
+        terminalScroll(1, 0);
         cursorRow--;
     }
 }
@@ -195,7 +195,7 @@ void terminalAdvanceCursorDown(char clamp) {
     }
 }
 
-void terminalScroll(int lines) {
+void terminalScroll(int lines, char moveCursor) {
     if(lines > SCREEN_ROWS)
         lines = SCREEN_ROWS;
 
@@ -227,6 +227,11 @@ void terminalScroll(int lines) {
     /* Erase scrolled portion of screen */
     SDL_SetRenderDrawColor(getScreenRenderer(), backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     SDL_RenderFillRect(getScreenRenderer(), &blankRect);
+
+    while(moveCursor && lines > 0) {
+        terminalAdvanceCursorUp(1);
+        lines--;
+    }
 }
 
 void terminalClear(char returnCursor) {

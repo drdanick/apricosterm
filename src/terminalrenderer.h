@@ -14,7 +14,7 @@ void terminalAdvanceCursorLeft(char clamp);
 void terminalAdvanceCursorRight(char clamp);
 void terminalAdvanceCursorUp(char clamp);
 void terminalAdvanceCursorDown(char clamp);
-void terminalScroll(int lines);
+void terminalScroll(int lines, char moveCursor);
 void terminalClear(char returnCursor);
 void terminalSetBackgroundColor(SDL_Color bgColor);
 void terminalSetForegroundColor(SDL_Color fgColor);
