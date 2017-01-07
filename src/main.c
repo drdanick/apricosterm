@@ -63,7 +63,7 @@ int main(int argc, char** argv) {
                     break;
             }
         }
-        SDL_Delay(5);
+        SDL_Delay(1);
         if(enableFilePipe) {
             termbyte = termioRead();
             if(termbyte > -1)
