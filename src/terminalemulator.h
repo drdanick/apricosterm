@@ -27,7 +27,7 @@
 #define CURSORVISIBLE 0x10 /* Set cursor to be visible or invisible */
 #define SCROLL        0x11 /* Scroll screen by n lines */
 #define CLS           0x12 /* Clear screen */
-#define RPT           0x7F /* Enable repeat message mode (this message is handled in the previous comm state) */
+#define RPT           0x7F /* Enable repeat message mode (Handled in the idle state) */
 
 
 /*========================================================
