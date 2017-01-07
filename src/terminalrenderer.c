@@ -76,12 +76,12 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
 
 void terminalPutStr(char* str) {
     while(*str) {
-        terminalPutChar(*str, 1);
+        terminalPutChar(*str, 1, 1);
         str++;
     }
 }
 
-void terminalPutChar(char c, char moveCursor) {
+void terminalPutChar(char c, char moveCursor, char autoNewLine) {
     SDL_Rect fontSrcRect = {
         0,
         0,
@@ -104,7 +104,7 @@ void terminalPutChar(char c, char moveCursor) {
     copyTextureSegmentToScreen(fontTexture, &fontSrcRect, &destRect);
 
     if(moveCursor)
-        terminalAdvanceCursor(0);
+        terminalAdvanceCursorRight(!autoNewLine);
 }
 
 void terminalNewLine(char carriageReturn, char scroll) {
@@ -135,7 +135,7 @@ void terminalBackspace(char lineWrap) {
         }
     }
 
-    terminalPutChar(' ', 0);
+    terminalPutChar(' ', 0, 1);
 }
 
 void terminalSetRow(int row) {
@@ -146,11 +146,21 @@ void terminalSetCol(int col) {
     cursorCol = col;
 }
 
-void terminalAdvanceCursor(char clamp) {
+void terminalAdvanceCursorLeft(char clamp) {
+    cursorCol--;
+    if(cursorCol < 0) {
+        if(clamp)
+            cursorCol = 0;
+        else
+            cursorCol = SCREEN_COLS - 1;
+    }
+}
+
+void terminalAdvanceCursorRight(char clamp) {
     cursorCol++;
     if(cursorCol >= SCREEN_COLS) {
         if(clamp) {
-            cursorCol--;
+            cursorCol = SCREEN_COLS - 1;
         } else {
             cursorCol = 0;
             cursorRow++;
@@ -160,6 +170,28 @@ void terminalAdvanceCursor(char clamp) {
     if(cursorRow >= SCREEN_ROWS) {
         terminalScroll(1);
         cursorRow--;
+    }
+}
+
+void terminalAdvanceCursorUp(char clamp) {
+    cursorRow--;
+
+    if(cursorRow < 0) {
+        if(clamp)
+            cursorRow = 0;
+        else
+            cursorRow = SCREEN_ROWS - 1;
+    }
+}
+
+void terminalAdvanceCursorDown(char clamp) {
+    cursorRow++;
+
+    if(cursorRow >= SCREEN_ROWS) {
+        if(clamp)
+            cursorRow = SCREEN_ROWS - 1;
+        else
+            cursorRow = 0;
     }
 }
 
@@ -220,11 +252,11 @@ void terminalSetForegroundColor(SDL_Color fgColor) {
     fontTexture = applyPaletteToTexture(fontTexture, palette, getScreenRenderer());
 }
 
-void enableCursor() {
+void terminalEnableCursor() {
     cursorEnabled = 1;
 }
 
-void disableCursor() {
+void terminalDisableCursor() {
     cursorEnabled = 0;
 }
 

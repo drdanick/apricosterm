@@ -61,4 +61,14 @@
 /* Indexed color table */
 extern const SDL_Color EGA_COLOR_TABLE[];
 
+
+/*========================================================
+ * Externaly visible functions
+ *========================================================
+ */
+
+void terminalHandleByte(char b);
+
+void resetTerminal();
+
 #endif /* TERM_EMULATOR_H */

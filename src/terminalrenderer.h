@@ -5,18 +5,21 @@
 
 int termRendererInit(SDL_Color bgColor, SDL_Color fgColor);
 void terminalPutStr(char* str);
-void terminalPutChar(char c, char moveCursor);
+void terminalPutChar(char c, char moveCursor, char autoNewLine);
 void terminalNewLine(char carriageReturn, char scroll);
 void terminalBackspace(char lineWrap);
 void terminalSetRow(int row);
 void terminalSetCol(int col);
-void terminalAdvanceCursor(char clamp);
+void terminalAdvanceCursorLeft(char clamp);
+void terminalAdvanceCursorRight(char clamp);
+void terminalAdvanceCursorUp(char clamp);
+void terminalAdvanceCursorDown(char clamp);
 void terminalScroll(int lines);
 void terminalClear(char returnCursor);
 void terminalSetBackgroundColor(SDL_Color bgColor);
 void terminalSetForegroundColor(SDL_Color fgColor);
-void enableCursor();
-void disableCursor();
+void terminalEnableCursor();
+void terminalDisableCursor();
 void terminalRefresh();
 void destroyTerminalRenderer();
 
