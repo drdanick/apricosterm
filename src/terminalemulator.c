@@ -53,8 +53,10 @@ void resetTerminal() {
 void termStateIdle(char b) {
     currentFunction = b;
 
-    if(b != ENDMSG)
+    if(b != ENDMSG && b != RPT)
         currentStateHandler = &termStateReadArgs;
+    if(b == RPT)
+        repeatEnabled = 1;
 }
 
 void termStateReadArgs(char b) {
@@ -120,9 +122,6 @@ void termStateReadArgs(char b) {
             break;
         case CLS:
             terminalClear(1);
-            break;
-        case RPT:
-            repeatEnabled = 1;
             break;
         default:
             break;
