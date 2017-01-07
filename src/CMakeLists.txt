@@ -8,6 +8,7 @@ set (apricosterm_src
     managedtextures.c
     terminalemulator.c
     terminalrenderer.c
+    serialtermio.c
     )
 
 include_directories (${SDL2_INCLUDE_DIRS})
