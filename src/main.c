@@ -53,7 +53,8 @@ int main(int argc, char** argv) {
                     }
                     break;
                 case SDL_TEXTINPUT:
-                    terminalPutStr(event.text.text);
+                    if(!enableFilePipe)
+                        terminalPutStr(event.text.text);
                     break;
                 case SDL_QUIT:
                     done = 1;
