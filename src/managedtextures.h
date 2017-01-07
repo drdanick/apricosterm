@@ -9,7 +9,7 @@ int manageExistingTexture(SDL_Texture* texture, SDL_Surface* surface);
 SDL_Texture* createManagedTextureFromFile(char* path, SDL_Palette* newPalette, SDL_Renderer* renderer);
 
 /**
- * Apply a new palette to a texture if it is already palettized (currently only applicable 
+ * Apply a new palette to a texture if it is already palettized (currently only applicable
  * for textures created from files).
  * If this function is successful, the original texture will be destroyed. Be careful!
  *
