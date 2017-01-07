@@ -18,15 +18,16 @@ int main(int argc, char** argv) {
     if(argc > 1)
         enableFilePipe = 1;
 
-    if(enableFilePipe) {
-        printf("Enabling fifo pipe @ %s\n", argv[1]);
-        termioInit(argv[1]);
-    }
-
     SDL_Color bgColor = BACKGROUND_COLOR;
     SDL_Color fgColor = FOREGROUND_COLOR;
     if(!termRendererInit(bgColor, fgColor)) {
         printf("ERROR: %s\n", screenGetError());
+    }
+
+    if(enableFilePipe) {
+        printf("Enabling fifo pipe @ %s\n", argv[1]);
+        termioInit(argv[1]);
+        terminalDisableCursor();
     }
 
     if(enableFilePipe)
