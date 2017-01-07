@@ -45,6 +45,8 @@ int initScreen(char* title, unsigned int width, unsigned int height) {
         return 0;
     }
 
+    SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
+
     if(!(IMG_Init(SDL_IMG_INIT_FLAGS) & SDL_IMG_INIT_FLAGS)) {
         screenSetError("initScreen", "Error initializing SDL image loader", 0);
         return 0;
