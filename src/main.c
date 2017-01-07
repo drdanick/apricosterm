@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
         SDL_Delay(5);
         if(enableFilePipe) {
             termbyte = termioRead();
-            if(termbyte > 0)
+            if(termbyte > -1)
                 terminalHandleByte((char)termbyte);
         }
         terminalRefresh();
