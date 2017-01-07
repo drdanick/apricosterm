@@ -13,7 +13,7 @@ char* pipeName_;
 void termioInit(char* pipeName) {
     pipeName_ = pipeName;
     mkfifo(pipeName, 0666);
-    pipefd = open(pipeName, O_WRONLY);
+    pipefd = open(pipeName, O_RDONLY);
 
     int flags = fcntl(pipefd, F_GETFL, 0);
     fcntl(pipefd, F_SETFL, flags | O_NONBLOCK);
