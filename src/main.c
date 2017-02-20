@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "apricosterm.h"
+#include "argparser.h"
 #include "screen.h"
 #include "terminalrenderer.h"
 #include "terminalemulator.h"
@@ -11,11 +12,14 @@ char enableFilePipe = 0;
 
 int main(int argc, char** argv) {
     SDL_Event event;
+
+    Settings settings = getSettingsFromArgs(argc, argv);
+
     initScreen("ApricosTerm", SCREEN_WIDTH, SCREEN_HEIGHT);
     char done = 0;
     int termbyte = -1;
 
-    if(argc > 1)
+    if(settings.fifoFile)
         enableFilePipe = 1;
 
     SDL_Color bgColor = BACKGROUND_COLOR;
@@ -25,8 +29,8 @@ int main(int argc, char** argv) {
     }
 
     if(enableFilePipe) {
-        printf("Enabling fifo pipe @ %s\n", argv[1]);
-        termioInit(argv[1]);
+        printf("Enabling fifo pipe @ %s\n", settings.fifoFile);
+        termioInit(settings.fifoFile);
         terminalDisableCursor();
     }
 

@@ -6,4 +6,6 @@ project(apricosterm)
 # Apricosterm version
 set (PROJECT_VERSION "0.1")
 
+add_definitions( -DVERSION="${PROJECT_VERSION}" )
+
 add_subdirectory (src)

@@ -3,6 +3,10 @@
 
 #include <SDL2/SDL.h>
 
+#ifndef VERSION
+#define VERSION "UNKNOWN"
+#endif /* VERSION */
+
 /* Font info */
 #define FONT_FILE   "vga8x16.png"
 #define CHAR_WIDTH  8

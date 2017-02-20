@@ -4,6 +4,7 @@ PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 
 set (apricosterm_src
     main.c
+    argparser.c
     screen.c
     managedtextures.c
     terminalemulator.c
