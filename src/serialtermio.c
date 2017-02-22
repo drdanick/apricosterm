@@ -22,7 +22,8 @@ void termioInit(char* pipeName) {
 int termioRead() {
     struct pollfd rfds = {
         pipefd,
-        POLLIN
+        POLLIN,
+        0
     };
     char buff;
 

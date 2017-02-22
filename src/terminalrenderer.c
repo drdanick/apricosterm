@@ -266,13 +266,6 @@ void terminalDisableCursor() {
 }
 
 void terminalRefresh() {
-    SDL_Rect bufferRect = {
-        0,
-        0,
-        bufferWidth,
-        bufferHeight
-    };
-
     setRenderTarget(screenBuffer);
     copyFullTextureToScreen(textBuffer, NULL);
 

@@ -102,11 +102,11 @@ void termStateReadArgs(char b) {
                 break;
             case SETFG:
                 if(b >= 0 && b < 16)
-                    terminalSetForegroundColor(EGA_COLOR_TABLE[b]);
+                    terminalSetForegroundColor(EGA_COLOR_TABLE[(int)b]);
                 break;
             case SETBG:
                 if(b >= 0 && b < 16)
-                    terminalSetBackgroundColor(EGA_COLOR_TABLE[b]);
+                    terminalSetBackgroundColor(EGA_COLOR_TABLE[(int)b]);
                 break;
             case SETROW:
                 terminalSetRow(b);

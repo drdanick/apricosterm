@@ -3,6 +3,19 @@
 
 #include <stdio.h>
 
+const struct option long_options[] = {
+    {"version", no_argument, 0, 'v'},
+    {"help", no_argument, 0, 'h'},
+    {"fifo_tty_file", required_argument, 0, 'f'},
+    {0, 0, 0, 0}
+};
+
+const char* option_descriptions[] = {
+    "Print version information and exit",
+    "Print this message and exit",
+    "Set fifo tty file",
+};
+
 void printHelp() {
     int i = 0;
     struct option coption;
