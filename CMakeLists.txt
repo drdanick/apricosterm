@@ -4,7 +4,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0) # Remove when CMake >= 2.8.4 is required
 project(apricosterm)
 
 # Apricosterm version
-set (PROJECT_VERSION "0.1")
+set (PROJECT_VERSION "0.2")
 
 # Resource directory
 set ( PROJECT_RESOURCE_DIR "${CMAKE_INSTALL_PREFIX}/share/apricosterm" )
