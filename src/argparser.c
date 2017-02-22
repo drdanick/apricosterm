@@ -6,6 +6,7 @@
 const struct option long_options[] = {
     {"version", no_argument, 0, 'v'},
     {"help", no_argument, 0, 'h'},
+    {"font", required_argument, 0, 't'},
     {"fifo_tty_file", required_argument, 0, 'f'},
     {0, 0, 0, 0}
 };
@@ -13,14 +14,15 @@ const struct option long_options[] = {
 const char* option_descriptions[] = {
     "Print version information and exit",
     "Print this message and exit",
-    "Set fifo tty file",
+    "Set custiom font file",
+    "Set fifo tty file"
 };
 
 void printHelp() {
     int i = 0;
     struct option coption;
     printf("Aprsim usage:\n");
-    printf("\tapricosterm [options] [-f file]\n");
+    printf("\tapricosterm [options] [-t file] [-f file]\n");
     printf("Options:\n");
     while(coption = long_options[i],
             !(coption.flag == 0
@@ -36,8 +38,10 @@ Settings getSettingsFromArgs(int argc, char** argv) {
     Settings s;
     int c;
 
+    s.fontFile = NULL;
     s.fifoFile = NULL;
-    while(c = getopt_long(argc, argv, "vhf:", long_options, NULL), c != -1) {
+
+    while(c = getopt_long(argc, argv, "vht:f:", long_options, NULL), c != -1) {
         switch(c) {
             case 'v':
                 printf("Apricosterm V%s\n", VERSION);
@@ -46,6 +50,9 @@ Settings getSettingsFromArgs(int argc, char** argv) {
             case 'h':
                 printHelp();
                 exit(EXIT_SUCCESS);
+                break;
+            case 't':
+                s.fontFile = optarg;
                 break;
             case 'f':
                 s.fifoFile = optarg;

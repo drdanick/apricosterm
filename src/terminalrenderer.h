@@ -3,7 +3,7 @@
 
 #include <SDL2/SDL.h>
 
-int termRendererInit(SDL_Color bgColor, SDL_Color fgColor);
+int termRendererInit(char* fontPath, SDL_Color bgColor, SDL_Color fgColor);
 void terminalPutStr(char* str);
 void terminalPutChar(char c, char moveCursor, char autoNewLine);
 void terminalNewLine(char carriageReturn, char scroll);

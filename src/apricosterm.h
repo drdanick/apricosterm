@@ -7,6 +7,10 @@
 #define VERSION "UNKNOWN"
 #endif /* VERSION */
 
+#ifndef RESOURCE_DIR
+#define RESOURCE_DIR "."
+#endif /* RESOURCE_DIR */
+
 /* Font info */
 #define FONT_FILE   "vga8x16.png"
 #define CHAR_WIDTH  8

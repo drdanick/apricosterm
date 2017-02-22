@@ -25,7 +25,7 @@ SDL_Palette* createTerminalPalette(SDL_Color backgroundColor, SDL_Color foregrou
 void adjustPaletteColors(SDL_Palette* palette, SDL_Color backgroundColor, SDL_Color foregroundColor);
 void drawCursor();
 
-int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
+int termRendererInit(char* fontPath, SDL_Color bgColor, SDL_Color fgColor) {
     cursorEnabled = 1;
     backgroundColor = bgColor;
     foregroundColor = fgColor;
@@ -52,7 +52,7 @@ int termRendererInit(SDL_Color bgColor, SDL_Color fgColor) {
         return 0;
     }
 
-    fontTexture = createManagedTextureFromFile(FONT_FILE, palette, getScreenRenderer());
+    fontTexture = createManagedTextureFromFile(fontPath, palette, getScreenRenderer());
     if(!fontTexture) {
         SDL_FreePalette(palette);
         destroyManagedTexture(textBuffer);

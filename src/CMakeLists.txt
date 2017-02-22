@@ -10,6 +10,7 @@ set (apricosterm
     terminalemulator.c
     terminalrenderer.c
     serialtermio.c
+    resources.c
     )
 
 include_directories (${SDL2_INCLUDE_DIRS})

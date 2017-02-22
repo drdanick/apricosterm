@@ -6,6 +6,7 @@
 
 typedef struct {
     char* fifoFile;
+    char* fontFile;
 } Settings;
 
 

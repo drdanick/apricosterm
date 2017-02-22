@@ -7,13 +7,25 @@
 #include "terminalemulator.h"
 #include "managedtextures.h"
 #include "serialtermio.h"
+#include "resources.h"
 
 char enableFilePipe = 0;
 
 int main(int argc, char** argv) {
     SDL_Event event;
+    char* fontFilePath;
 
     Settings settings = getSettingsFromArgs(argc, argv);
+
+    fontFilePath =
+        settings.fontFile ?
+        settings.fontFile :
+        findResourcePath(FONT_FILE);
+
+    if(!fontFilePath) {
+        fprintf(stderr, "ERROR: Could not find font file\n");
+        return EXIT_FAILURE;
+    }
 
     initScreen("ApricosTerm", SCREEN_WIDTH, SCREEN_HEIGHT);
     char done = 0;
@@ -24,7 +36,7 @@ int main(int argc, char** argv) {
 
     SDL_Color bgColor = BACKGROUND_COLOR;
     SDL_Color fgColor = FOREGROUND_COLOR;
-    if(!termRendererInit(bgColor, fgColor)) {
+    if(!termRendererInit(fontFilePath, bgColor, fgColor)) {
         printf("ERROR: %s\n", screenGetError());
     }
 
