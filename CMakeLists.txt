@@ -6,7 +6,26 @@ project(apricosterm)
 # Apricosterm version
 set (PROJECT_VERSION "0.1")
 
-add_definitions( -DVERSION="${PROJECT_VERSION}" )
+# Resource directory
+set ( PROJECT_RESOURCE_DIR "${CMAKE_INSTALL_PREFIX}/share/apricosterm" )
+
+add_definitions(
+    -DVERSION="${PROJECT_VERSION}"
+    -DRESOURCE_DIR="${PROJECT_RESOURCE_DIR}"
+    )
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
+    "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(warnings "-Wall -Wextra -Werror")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set(warnings "/W4 /WX /EHsc")
+endif()
+if (NOT CONFIGURED_ONCE)
+    set(CMAKE_CXX_FLAGS "${warnings}"
+        CACHE STRING "Flags used by the compiler during all build types." FORCE)
+    set(CMAKE_C_FLAGS   "${warnings}"
+        CACHE STRING "Flags used by the compiler during all build types." FORCE)
+endif()
 
 # uninstall target
 configure_file(
@@ -18,3 +37,4 @@ add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
 add_subdirectory (src)
+add_subdirectory (resources)
