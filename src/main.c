@@ -27,12 +27,17 @@ int main(int argc, char** argv) {
         return EXIT_FAILURE;
     }
 
-    initScreen("ApricosTerm", SCREEN_WIDTH, SCREEN_HEIGHT);
     char done = 0;
     int termbyte = -1;
 
-    if(settings.fifoFile)
+    if(settings.fifoFile) {
         enableFilePipe = 1;
+
+        printf("Enabling fifo pipe...\n");
+        termioInit(settings.fifoFile);
+    }
+
+    initScreen("ApricosTerm", SCREEN_WIDTH, SCREEN_HEIGHT);
 
     SDL_Color bgColor = BACKGROUND_COLOR;
     SDL_Color fgColor = FOREGROUND_COLOR;
@@ -41,13 +46,9 @@ int main(int argc, char** argv) {
     }
 
     if(enableFilePipe) {
-        printf("Enabling fifo pipe @ %s\n", settings.fifoFile);
-        termioInit(settings.fifoFile);
         terminalDisableCursor();
-    }
-
-    if(enableFilePipe)
         SDL_StartTextInput();
+    }
 
     while(!done) {
         while(SDL_PollEvent(&event)) {
