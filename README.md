@@ -45,7 +45,7 @@ the Apricos CPU and Apricosterm must specify the same FIFO named pipe file.
 
 For example, you can point Apricosterm to the file `/tmp/apricos_fifo` by entering the following:
 ```
-apricosterm -f /tmp/apricosfifo
+apricosterm -f /tmp/apricos_fifo
 ```
 
 
