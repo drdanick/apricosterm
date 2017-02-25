@@ -43,6 +43,11 @@ If you would like to use the terminal as intended (and actually connect it to a 
 then you will need to specify a FIFO named pipe file with the `-f` command line switch. Both
 the Apricos CPU and Apricosterm must specify the same FIFO named pipe file.
 
+For example, you can point Apricosterm to the file `/tmp/apricos_fifo` by entering the following:
+```
+apricosterm -f /tmp/apricosfifo
+```
+
 
 Command line options
 --------------------
