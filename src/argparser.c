@@ -14,7 +14,7 @@ const struct option long_options[] = {
 const char* option_descriptions[] = {
     "Print version information and exit",
     "Print this message and exit",
-    "Set custiom font file",
+    "Set custom bitmap font",
     "Set fifo tty file"
 };
 
