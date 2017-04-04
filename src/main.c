@@ -86,6 +86,8 @@ int main(int argc, char** argv) {
             termbyte = termioRead();
             if(termbyte > -1)
                 terminalHandleByte((char)termbyte);
+            else
+                SDL_Delay(10);
         }
         terminalRefresh();
     }
