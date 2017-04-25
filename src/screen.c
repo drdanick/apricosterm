@@ -53,7 +53,7 @@ int initScreen(char* title, unsigned int width, unsigned int height) {
     }
 
     window = SDL_CreateWindow(title, 50, 50, width, height, SDL_WINDOW_SHOWN);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = SDL_CreateRenderer(window, -1, APRICOSTERM_RENDERER_TYPE);
 
     if(!window || !renderer) {
         screenSetError("initScreen", "Could not create SDL window", 1);

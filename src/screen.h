@@ -4,6 +4,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+#ifdef APRICOSTERM_USE_SOFTWARE_RENDERER
+#define APRICOSTERM_RENDERER_TYPE SDL_RENDERER_SOFTWARE
+#else
+#define APRICOSTERM_RENDERER_TYPE SDL_RENDERER_ACCELERATED
+#endif /* APRICOSTERM_USE_SOFTWARE_RENDERER */
+
 const char* screenGetError();
 void screenSetError(char* functionName, char* error, char showSdlErr);
 
