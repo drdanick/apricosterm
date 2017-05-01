@@ -26,6 +26,6 @@
 
 /* Terminal settings */
 #define BACKGROUND_COLOR {0, 0, 0, 255}
-#define FOREGROUND_COLOR {0, 200, 0, 255}
+#define FOREGROUND_COLOR EGA_GRAY
 
 #endif /* APRTERM_H */
