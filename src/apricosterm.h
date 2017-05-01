@@ -25,7 +25,7 @@
 #define SCREEN_COLS   (SCREEN_WIDTH / CHAR_WIDTH)
 
 /* Terminal settings */
-#define BACKGROUND_COLOR {0, 0, 0, 255}
+#define BACKGROUND_COLOR EGA_BLACK
 #define FOREGROUND_COLOR EGA_GRAY
 
 #endif /* APRTERM_H */
