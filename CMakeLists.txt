@@ -37,5 +37,15 @@ configure_file(
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
+include (FindPkgConfig)
+pkg_search_module (SDL2 REQUIRED IMPORTED_TARGET sdl2)
+PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED IMPORTED_TARGET SDL2_image>=2.0.0)
+
 add_subdirectory (src)
 add_subdirectory (resources)
+
+option (APRICOSTERM_BUILD_TESTS "Build the test suite" ON)
+if (APRICOSTERM_BUILD_TESTS)
+    enable_testing ()
+    add_subdirectory (tests)
+endif()

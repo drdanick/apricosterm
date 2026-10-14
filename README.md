@@ -32,6 +32,24 @@ make install
 ```
 
 
+Testing
+-------
+
+The test suite is built along with Apricosterm (turn it off with `-DAPRICOSTERM_BUILD_TESTS=OFF`).
+To run it, enter the following from the build directory:
+```
+ctest --output-on-failure
+```
+
+There are two test programs, which can also be run directly from `build/tests`:
+
+- `test_emulator` checks how the terminal protocol is handled, using a fake renderer that logs each call.
+- `test_renderer` runs the real renderer off screen (with SDL's dummy video driver), and checks
+  the drawn characters pixel by pixel against the font.
+
+Either program takes an optional argument, and runs only the tests whose names contain it.
+
+
 Running
 -------
 
