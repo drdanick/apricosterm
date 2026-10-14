@@ -9,6 +9,13 @@
 #include "serialtermio.h"
 #include "resources.h"
 
+/* Bytes read from the pipe at a time */
+#define TERMIO_BUFFER_SIZE 4096
+/* How long to sleep when the pipe is idle (ms) */
+#define TERMIO_IDLE_WAIT   10
+/* Longest time to spend handling pipe data before redrawing (ms) */
+#define TERMIO_MAX_BATCH   15
+
 char enableFilePipe = 0;
 
 int main(int argc, char** argv) {
@@ -28,7 +35,10 @@ int main(int argc, char** argv) {
     }
 
     char done = 0;
-    int termbyte = -1;
+    char termbuff[TERMIO_BUFFER_SIZE];
+    int termcount;
+    int i;
+    Uint32 batchStart;
 
     if(settings.fifoFile) {
         enableFilePipe = 1;
@@ -81,13 +91,26 @@ int main(int argc, char** argv) {
                     break;
             }
         }
-        SDL_Delay(1);
         if(enableFilePipe) {
-            termbyte = termioRead();
-            if(termbyte > -1)
-                terminalHandleByte((char)termbyte);
-            else
-                SDL_Delay(10);
+            /* Handle everything waiting in the pipe before redrawing, so
+             * output never queues up behind the frame rate. Give up after
+             * TERMIO_MAX_BATCH ms so that events still get processed. */
+            batchStart = SDL_GetTicks();
+            termcount = termioRead(termbuff, TERMIO_BUFFER_SIZE);
+            if(termcount == 0)
+                SDL_Delay(TERMIO_IDLE_WAIT); /* Idle, or the writer has closed the pipe */
+
+            while(termcount > 0) {
+                for(i = 0; i < termcount; i++)
+                    terminalHandleByte(termbuff[i]);
+
+                if(SDL_GetTicks() - batchStart >= TERMIO_MAX_BATCH)
+                    break;
+
+                termcount = termioRead(termbuff, TERMIO_BUFFER_SIZE);
+            }
+        } else {
+            SDL_Delay(1);
         }
         terminalRefresh();
     }
