@@ -27,20 +27,25 @@ void termioInit(char* pipeName) {
     fcntl(pipefd, F_SETFL, flags | O_NONBLOCK);
 }
 
-int termioRead() {
+/*
+ * Read up to size bytes into buff without blocking.
+ * Returns the number of bytes read, or 0 if none were available.
+ */
+int termioRead(char* buff, int size) {
     struct pollfd rfds = {
         pipefd,
         POLLIN,
         0
     };
-    char buff;
+    ssize_t count;
 
-    if(poll(&rfds, 1, 5) > 0) {
-        read(pipefd, &buff, 1);
-        return buff;
+    if(poll(&rfds, 1, 0) > 0) {
+        count = read(pipefd, buff, size);
+        if(count > 0)
+            return count;
     }
 
-    return -1;
+    return 0;
 }
 
 void termioClose() {
