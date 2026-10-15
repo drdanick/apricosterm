@@ -1,7 +1,3 @@
-include (FindPkgConfig)
-pkg_search_module (SDL2 REQUIRED IMPORTED_TARGET sdl2)
-PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED IMPORTED_TARGET SDL2_image>=2.0.0)
-
 set (apricosterm
     main.c
     argparser.c

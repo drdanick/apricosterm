@@ -283,8 +283,9 @@ void destroyTerminalRenderer() {
 
 /* private */
 void charCodeToFontCoordinates(char c, int* outRow, int* outCol) {
-    *outRow = c / FONT_COLS;
-    *outCol = c % FONT_COLS;
+    /* char may be signed, so codes 0x80-0xFF must be read as unsigned */
+    *outRow = (unsigned char)c / FONT_COLS;
+    *outCol = (unsigned char)c % FONT_COLS;
 }
 
 /* private */
